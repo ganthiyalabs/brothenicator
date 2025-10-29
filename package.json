@@ -32,6 +32,7 @@
     "db:migrate": "turbo -F @brothenticator/db db:migrate"
   },
   "dependencies": {
+    "@expo/cli": "^54.0.14",
     "dotenv": "^17.2.2",
     "zod": "^4.1.11"
   },
