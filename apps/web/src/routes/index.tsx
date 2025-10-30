@@ -1,50 +1,49 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { trpc } from "@/utils/trpc";
-import { useQuery } from "@tanstack/react-query";
+import SearchBar from "@/components/searchbar";
+import RecoverCodes, { type RecoveryItem } from "@/components/recoverCodes";
+import { useMemo, useState } from "react";
 
 export const Route = createFileRoute("/")({
-	component: HomeComponent,
+    component: HomeComponent,
 });
 
-const TITLE_TEXT = `
- ██████╗ ███████╗████████╗████████╗███████╗██████╗
- ██╔══██╗██╔════╝╚══██╔══╝╚══██╔══╝██╔════╝██╔══██╗
- ██████╔╝█████╗     ██║      ██║   █████╗  ██████╔╝
- ██╔══██╗██╔══╝     ██║      ██║   ██╔══╝  ██╔══██╗
- ██████╔╝███████╗   ██║      ██║   ███████╗██║  ██║
- ╚═════╝ ╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝
-
- ████████╗    ███████╗████████╗ █████╗  ██████╗██╗  ██╗
- ╚══██╔══╝    ██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
-    ██║       ███████╗   ██║   ███████║██║     █████╔╝
-    ██║       ╚════██║   ██║   ██╔══██║██║     ██╔═██╗
-    ██║       ███████║   ██║   ██║  ██║╚██████╗██║  ██╗
-    ╚═╝       ╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
- `;
-
 function HomeComponent() {
-	const healthCheck = useQuery(trpc.healthCheck.queryOptions());
+    const [query, setQuery] = useState("");
 
-	return (
-		<div className="container mx-auto max-w-3xl px-4 py-2">
-			<pre className="overflow-x-auto font-mono text-sm">{TITLE_TEXT}</pre>
-			<div className="grid gap-6">
-				<section className="rounded-lg border p-4">
-					<h2 className="mb-2 font-medium">API Status</h2>
-					<div className="flex items-center gap-2">
-						<div
-							className={`h-2 w-2 rounded-full ${healthCheck.data ? "bg-green-500" : "bg-red-500"}`}
-						/>
-						<span className="text-sm text-muted-foreground">
-							{healthCheck.isLoading
-								? "Checking..."
-								: healthCheck.data
-									? "Connected"
-									: "Disconnected"}
-						</span>
-					</div>
-				</section>
-			</div>
-		</div>
-	);
+    const items: RecoveryItem[] = useMemo(
+        () => [
+            {
+                id: "1",
+                logoUrl: "/logo.png",
+                siteName: "Brothenticator",
+                sitePath: "app/settings/security",
+                code: "123 456",
+                secondsRemaining: 23,
+            },
+            {
+                id: "2",
+                logoUrl: "/logo.png",
+                siteName: "Example Site",
+                sitePath: "account/2fa",
+                code: "987 654",
+                secondsRemaining: 17,
+            },
+            {
+                id: "3",
+                logoUrl: "/logo.png",
+                siteName: "Another App",
+                sitePath: "login/otp",
+                code: "246 810",
+                secondsRemaining: 9,
+            },
+        ],
+        []
+    );
+
+    return (
+        <div className="container mx-auto max-w-3xl px-4 py-4">
+            <SearchBar value={query} onChange={setQuery} />
+            <RecoverCodes items={items} query={query} />
+        </div>
+    );
 }
