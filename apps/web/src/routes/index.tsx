@@ -10,35 +10,30 @@ export const Route = createFileRoute("/")({
 function HomeComponent() {
     const [query, setQuery] = useState("");
 
-    const items: RecoveryItem[] = useMemo(
-        () => [
-            {
-                id: "1",
-                logoUrl: "/logo.png",
-                siteName: "Brothenticator",
-                sitePath: "app/settings/security",
-                code: "123 456",
-                secondsRemaining: 23,
-            },
-            {
-                id: "2",
-                logoUrl: "/logo.png",
-                siteName: "Example Site",
-                sitePath: "account/2fa",
-                code: "987 654",
-                secondsRemaining: 17,
-            },
-            {
-                id: "3",
-                logoUrl: "/logo.png",
-                siteName: "Another App",
-                sitePath: "login/otp",
-                code: "246 810",
-                secondsRemaining: 9,
-            },
-        ],
-        []
-    );
+	const items: RecoveryItem[] = [
+		{
+			id: "1",
+			logoUrl: "https://www.google.com/s2/favicons?domain=github.com&sz=64",
+			siteName: "GitHub",
+			sitePath: "github.com",
+			code: "123 456",
+		},
+		{
+			id: "2",
+			logoUrl: "https://www.google.com/s2/favicons?domain=discord.com&sz=64",
+			siteName: "Discord",
+			sitePath: "discord.com",
+			code: "987 654",
+		},
+		{
+			id: "3",
+			logoUrl: "https://www.google.com/s2/favicons?domain=twitter.com&sz=64",
+			siteName: "Twitter/X",
+			sitePath: "x.com",
+			code: "246 810",
+		},
+	];
+
 
     return (
         <div className="container mx-auto max-w-3xl px-4 py-4">

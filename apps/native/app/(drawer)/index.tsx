@@ -1,30 +1,53 @@
+import React from "react";
 import { authClient } from "@/lib/auth-client";
-import { useQuery } from "@tanstack/react-query";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import { Container } from "@/components/container";
-import { SignIn } from "@/components/sign-in";
-import { SignUp } from "@/components/sign-up";
-import { queryClient, trpc } from "@/utils/trpc";
+import { queryClient } from "@/utils/trpc";
+import SearchBar from "@/components/search-bar";
+import RecoveryCodes, { type RecoveryItem } from "@/components/recovery-codes";
 
 export default function Home() {
-	const healthCheck = useQuery(trpc.healthCheck.queryOptions());
-	const privateData = useQuery(trpc.privateData.queryOptions());
 	const { data: session } = authClient.useSession();
+
+	const items: RecoveryItem[] = [
+		{
+			id: "1",
+			logoUrl: "https://www.google.com/s2/favicons?domain=github.com&sz=64",
+			siteName: "GitHub",
+			sitePath: "github.com",
+			code: "123 456",
+		},
+		{
+			id: "2",
+			logoUrl: "https://www.google.com/s2/favicons?domain=discord.com&sz=64",
+			siteName: "Discord",
+			sitePath: "discord.com",
+			code: "987 654",
+		},
+		{
+			id: "3",
+			logoUrl: "https://www.google.com/s2/favicons?domain=twitter.com&sz=64",
+			siteName: "Twitter/X",
+			sitePath: "x.com",
+			code: "246 810",
+		},
+	];
+
+	const [query, setQuery] = React.useState("");
 
 	return (
 		<Container>
 			<ScrollView className="flex-1">
 				<View className="px-4">
-					<Text className="font-mono text-foreground text-3xl font-bold mb-4">
-						BETTER T STACK
-					</Text>
+					<SearchBar value={query} onChange={setQuery} placeholder="Search codes" />
+
+					<RecoveryCodes items={items} query={query} />
 					{session?.user ? (
 						<View className="mb-6 p-4 bg-card rounded-lg border border-border">
 							<View className="flex-row justify-between items-center mb-2">
 								<Text className="text-foreground text-base">
-									Welcome,{" "}
-									<Text className="font-medium">{session.user.name}</Text>
+									Welcome, <Text className="font-medium">{session.user.name}</Text>
 								</Text>
 							</View>
 							<Text className="text-muted-foreground text-sm mb-4">
@@ -42,41 +65,6 @@ export default function Home() {
 							</TouchableOpacity>
 						</View>
 					) : null}
-					<View className="mb-6 rounded-lg border border-border p-4">
-						<Text className="mb-3 font-medium text-foreground">API Status</Text>
-						<View className="flex-row items-center gap-2">
-							<View
-								className={`h-3 w-3 rounded-full ${
-									healthCheck.data ? "bg-green-500" : "bg-red-500"
-								}`}
-							/>
-							<Text className="text-muted-foreground">
-								{healthCheck.isLoading
-									? "Checking..."
-									: healthCheck.data
-										? "Connected to API"
-										: "API Disconnected"}
-							</Text>
-						</View>
-					</View>
-					<View className="mb-6 rounded-lg border border-border p-4">
-						<Text className="mb-3 font-medium text-foreground">
-							Private Data
-						</Text>
-						{privateData && (
-							<View>
-								<Text className="text-muted-foreground">
-									{privateData.data?.message}
-								</Text>
-							</View>
-						)}
-					</View>
-					{!session?.user && (
-						<>
-							<SignIn />
-							<SignUp />
-						</>
-					)}
 				</View>
 			</ScrollView>
 		</Container>
