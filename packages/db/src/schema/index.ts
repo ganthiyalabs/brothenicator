@@ -24,3 +24,7 @@ export const recoveryCodesRelations = relations(recoveryCodesTable, ({ one }) =>
     references: [usersTable.user_id],
   }),
 }));
+
+export * from "./users";
+export * from "./twoFactorSecrets";
+export * from "./recoveryCodes";
